@@ -1,0 +1,55 @@
+/*
+Program name: style.css
+Author: Andrew Wu
+Date created: 2/26/2026
+Date last edited: 2/26/2026
+Version: 1.0
+Description: CSS file that styles the patient registration form */
+
+body{
+    background-color: beige;
+}
+
+img{
+    width: 150px; /* Sets the width of the image */
+    height: auto; /* Maintains the aspect ratio of the image */
+    opacity: 0.8; /* Sets the opacity of the image to 80% */
+}
+
+.logo-title{
+    display: flex; /* Makes the items in logo-title class appear in a row*/
+    align-items: center; /* Vertically centers the items in logo-title class */
+}
+
+h1{
+    margin: auto; /* Centers the h1 element within the logo-title div */
+    font-size: 70px; /* Sets the font size of the h1 element */
+    color:rgb(57, 120, 134);
+}
+
+.right-align{
+    text-align: right; /* Aligns text to the right within the div */
+    width: 100%;
+    color:rgb(57, 120, 134);
+}
+
+form{
+    background-color:rgb(53, 87, 126);;
+    color:beige;
+}
+
+.footer{
+    color:rgb(57, 120, 134);
+}
+
+a:link{
+    color:blue; /* Sets the color of the link */
+}
+
+a:visited{
+    color:purple; /* Sets the color of the visited link */
+}
+
+a:hover{
+    color:orange; /* Sets the color of the link when hovered */
+}
