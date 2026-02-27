@@ -1,0 +1,233 @@
+<!--
+Program name: patient-form.html
+Author: Andrew Wu
+Date created: 2/26/2026
+Date last edited: 2/26/2026
+Version: 1.0
+Description: HTML code that essentially creates and structures the web page. In this case, the 
+code creates the registration form.*/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class = "header">
+    <div class ="logo-title">
+        <img src="logo.jpg" alt="GP Medical Logo" class="logo">
+        <h1>GP Medical</h1>
+    </div>
+    <div class ="right-align">
+        <b>Today's date is: <span id="today-date"></span></b>
+            <script>
+            // Get the current date
+            const today = new Date();
+
+            // Get the month, day, and year components
+            let mm = today.getMonth() + 1;
+            let dd = today.getDate();
+            const yyyy = today.getFullYear();
+
+            // Format the date as mm/dd/yyyy
+            const formattedDate = mm + '/' + dd + '/' + yyyy;
+
+            // Display the formatted date in the HTML element with id="today-date"
+            document.getElementById('today-date').innerHTML = formattedDate;
+            </script>
+    </div>
+</div>
+<hr>
+<form name="registration" onSubmit="return formValidation();">
+<table cellpadding="6">
+
+<tr>
+    <td>First Name:</td>
+    <td><input type="text" name="fName" size="30"></td>
+
+    <td>Middle Initial:</td>
+    <td><input type="text" name="mInitial" size="1"></td>
+
+    <td>Last Name:</td>
+    <td><input type="text" name="lName" size="30"></td>
+</tr>
+
+<tr>
+    <td>Date of Birth:</td>
+    <td><input type="date" name="dob"></td>
+</tr>
+
+<tr>
+    <td>Social Security Number:</td>
+    <td><input type="password" name="ssn" size="11"></td>
+</tr>
+
+<tr>
+    <td>Address Line 1:</td>
+    <td colspan="5"><input type="text" name="address1" size="30"></td>
+</tr>
+
+<tr>
+    <td>Address Line 2:</td>
+    <td colspan="5"><input type="text" name="address2" size="30"></td>
+</tr>
+
+<tr>
+    <td>City:</td>
+    <td><input type="text" name="city" size="30"></td>
+
+    <td>State:</td>
+    <td>
+        <select name="state">
+            <option value="Default">Select State</option>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AR">AR</option>
+            <option value="AZ">AZ</option>
+            <option value="CA">CA</option>
+            <option value="CO">CO</option>
+            <option value="CT">CT</option>
+            <option value="DC">DC</option>
+            <option value="DE">DE</option>
+            <option value="FL">FL</option>
+            <option value="GA">GA</option>
+            <option value="HI">HI</option>
+            <option value="IA">IA</option>
+            <option value="ID">ID</option>
+            <option value="IL">IL</option>
+            <option value="IN">IN</option>
+            <option value="KS">KS</option>
+            <option value="KY">KY</option>
+            <option value="LA">LA</option>
+            <option value="MA">MA</option>
+            <option value="MD">MD</option>
+            <option value="ME">ME</option>
+            <option value="MI">MI</option>
+            <option value="MN">MN</option>
+            <option value="MO">MO</option>
+            <option value="MS">MS</option>
+            <option value="MT">MT</option>
+            <option value="NC">NC</option>
+            <option value="NE">NE</option>
+            <option value="NH">NH</option>
+            <option value="NJ">NJ</option>
+            <option value="NM">NM</option>
+            <option value="NV">NV</option>
+            <option value="NY">NY</option>
+            <option value="ND">ND</option>
+            <option value="OH">OH</option>
+            <option value="OK">OK</option>
+            <option value="OR">OR</option>
+            <option value="PA">PA</option>
+            <option value="RI">RI</option>
+            <option value="SC">SC</option>
+            <option value="SD">SD</option>
+            <option value="TN">TN</option>
+            <option value="TX">TX</option>
+            <option value="UT">UT</option>
+            <option value="VT">VT</option>
+            <option value="VA">VA</option>
+            <option value="WA">WA</option>
+            <option value="WI">WI</option>
+            <option value="WV">WV</option>
+            <option value="WY">WY</option>
+        </select>
+    </td>
+
+    <td>Zip Code:</td>
+    <td><input type="text" name="zip" size="10"></td>
+</tr>
+
+<tr>
+    <td>Email Address:</td>
+    <td colspan="5"><input type="text" name="email" size="40"></td>
+</tr>
+
+<tr>
+    <td>Phone Number:</td>
+    <td><input type="text" name="phone" size="12"></td>
+</tr>
+
+<tr>
+    <td>Race:</td>
+    <td colspan="5">
+        <input type="checkbox" name="white"> White
+        <input type="checkbox" name="african"> African American
+        <input type="checkbox" name="asian"> Asian
+        <input type="checkbox" name="white"> American Indian
+        <input type="checkbox" name="african"> Pacific Islander
+        <input type="checkbox" name="asian"> Hispanic
+        <input type="checkbox" name="other"> Other
+    </td>
+</tr>
+
+<tr>
+    <td>Gender:</td>
+    <td colspan="5">
+        <input type="radio" name="gender" value="male"> Male
+        <input type="radio" name="gender" value="female"> Female
+        <input type="radio" name="gender" value="other"> Other
+    </td>
+</tr>
+
+<tr>
+    <td>Ethnicity:</td>
+    <td colspan="5">
+        <input type="radio" name="ethnicity" value="hispanic"> Hispanic
+        <input type="radio" name="ethnicity" value="non-hispanic"> Non-Hispanic
+    </td>
+</tr>
+
+<tr>
+    <td>Language:</td>
+    <td colspan="5">
+        <input type="radio" name="language" value="english"> English
+        <input type="radio" name="language" value="non-english"> Non-English
+    </td>
+</tr>
+
+<tr>
+    <td>Health Rating:</td>
+    <td colspan="5">
+        <input type="range" min="1" max="100" value="50">
+    </td>
+</tr>
+
+<tr>
+    <td>Describe your symptoms:</td>
+    <td colspan="5">
+        <textarea name="symptoms" rows="3" cols="50"></textarea>
+    </td>
+</tr>
+
+<tr>
+    <td>User ID:</td>
+    <td><input type="text" name="userID" size="20"></td>
+
+    <td>Password:</td>
+    <td><input type="password" name="password" size="20"></td>
+</tr>
+
+<tr>
+    <td colspan="6" align="center">
+        <button type="reset">Clear Form</button>
+        <button type="submit">Submit</button>
+    </td>
+</tr>
+
+</table>
+</form>
+<div class="footer">
+    <p>Copyright © 2026 GP Medical. All rights reserved.</p>
+    <a href="https://www.google.com" target="_blank">Contact Us!</a>
+</div>
+</body>
+</html>
+
+
+
+
+
