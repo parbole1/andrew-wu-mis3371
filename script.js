@@ -34,7 +34,6 @@ document.getElementById('reviewBtn').addEventListener('click', function() {
     const raceStr = races.length > 0 ? races.join(", ") : "None selected";
 
     // Collect Radio Buttons
-    // Using optional chaining (?.) in case the user clicks review before selecting an option
     const gender = document.querySelector('input[name="gender"]:checked')?.value || "Not selected";
     const ethnicity = document.querySelector('input[name="ethnicity"]:checked')?.value || "Not selected";
     const language = document.querySelector('input[name="language"]:checked')?.value || "Not selected";
