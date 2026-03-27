@@ -124,9 +124,9 @@ function formValidation() {
     userIDField.value = userIDField.value.toLowerCase();
 
     // Check Textarea for double quotes
-    const comments = document.getElementById('comments').value;
-    if (comments.includes('"')) {
-        alert("Double quotes (\") are not allowed in the comments section.");
+    const symptoms = document.getElementById('symptoms').value;
+    if (symptoms.includes('"')) {
+        alert("Double quotes (\") are not allowed in the symptoms section.");
         return false;
     }
 
