@@ -2,8 +2,8 @@
 Program name: patient-form.html
 Author: Andrew Wu
 Date created: 2/26/2026
-Date last edited: 3/27/2026
-Version: 2.0
+Date last edited: 4/19/2026
+Version: 3.0
 Description: HTML code that essentially creates and structures the web page. In this case, the 
 code creates the registration form.*/ -->
 
@@ -27,7 +27,7 @@ code creates the registration form.*/ -->
 </div>
 <hr>
 
-<form name="registration" id="registrationForm" onsubmit="return formValidation();"> 
+<form name="registration" id="registrationForm" action="success.html" method="GET">
 <table cellpadding="6">
 
 <tr>
@@ -38,7 +38,7 @@ code creates the registration form.*/ -->
     <td><input type="text" name="mInitial" id="mInitial" size="1" title="Enter your middle initial" pattern="[A-Za-z]" maxlength="1"></td>
 
     <td>Last Name:</td>
-    <td><input type="text" name="lName" id="lName" size="30" title="1-30 chars, letters/apostrophes/dashes/digits 2-5" minlength="1" maxlength="30" pattern="[A-Za-z\-'2-5]+" required></td>
+    <td><input type="text" name="lName" id="lName" size="30" title="1-30 chars, letters/apostrophes/dashes only" minlength="1" maxlength="30" pattern="[A-Za-z\-']+" required></td>
 </tr>
 
 <tr>
@@ -48,7 +48,7 @@ code creates the registration form.*/ -->
 
 <tr>
     <td>Social Security Number:</td>
-    <td><input type="password" name="ssn" id="ssn" size="11" title="Enter 9-digit SSN (e.g., 123-45-6789)" pattern="^(?:\d{3}-\d{2}-\d{4}|\d{9})$" required></td>
+    <td><input type="text" name="ssn" id="ssn" size="11" title="Enter 9-digit SSN" pattern="^\d{3}-\d{2}-\d{4}$" maxlength="11" required></td>
 </tr>
 
 <tr>
@@ -141,7 +141,7 @@ code creates the registration form.*/ -->
 
 <tr>
     <td>User ID:</td>
-    <td><input type="text" name="userID" id="userID" size="20" title="5-30 chars. No spaces. Starts with letter. Only letters, numbers, _, -" minlength="5" maxlength="30" pattern="^[A-Za-z][A-Za-z0-9_\-]+$" required></td>
+    <td><input type="text" name="userID" id="userID" size="20" title="5-20 chars. No spaces. Starts with letter. Only letters, numbers, _, -" minlength="5" maxlength="20" pattern="^[A-Za-z][A-Za-z0-9_\-]+$" required></td>
 </tr>
 
 <tr>
@@ -156,9 +156,12 @@ code creates the registration form.*/ -->
 
 <tr>
     <td colspan="6" align="center">
-        <button type="reset">Clear Form</button>
+        <button type="reset" id="resetBtn">Clear Form</button>
         <button type="button" id="reviewBtn" title="Review your information before submitting">Review</button>
-        <button type="submit">Submit</button>
+        <button type="button" id="validateBtn" title="Check your information for errors">Validate</button>
+        <button type="submit" id="submitBtn" style="display: none; background-color: #4CAF50; color: white;">Submit</button>
+        
+        <div id="errorDisplay" style="color: #ffb3b3; margin-top: 15px; text-align: left; display: none;"></div>
     </td>
 </tr>
 

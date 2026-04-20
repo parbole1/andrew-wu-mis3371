@@ -2,8 +2,8 @@
 Program name: script.js
 Author: Andrew Wu
 Date created: 3/27/2026
-Date last edited: 3/27/2026
-Version: 1.0
+Date last edited: 4/19/2026
+Version: 2.0
 Description: JavaScript file that provides functionality for the patient registration form */
 
 // --- REVIEW BUTTON FUNCTIONALITY ---
@@ -68,6 +68,114 @@ document.getElementById('reviewBtn').addEventListener('click', function() {
     reviewSection.style.display = 'block';
     
     reviewSection.scrollIntoView({ behavior: 'smooth' });
+});
+
+document.getElementById('validateBtn').addEventListener('click', function() {
+    let errors = [];
+    const errorDisplay = document.getElementById('errorDisplay');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Retrieve all data
+    const fName = document.getElementById('fName').value.trim();
+    const mInitial = document.getElementById('mInitial').value.trim();
+    const lName = document.getElementById('lName').value.trim();
+    const dob = document.getElementById('dob').value;
+    const ssn = document.getElementById('ssn').value.trim();
+    const address1 = document.getElementById('address1').value.trim();
+    const address2 = document.getElementById('address2').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const state = document.getElementById('state').value;
+    const zip = document.getElementById('zip').value.trim();
+    
+    // Force lowercase on email and User ID
+    const emailField = document.getElementById('email');
+    emailField.value = emailField.value.toLowerCase().trim();
+    const email = emailField.value;
+
+    const phone = document.getElementById('phone').value.trim();
+    const symptoms = document.getElementById('symptoms').value.trim();
+    
+    const userIDField = document.getElementById('userID');
+    userIDField.value = userIDField.value.toLowerCase().trim();
+    const userID = userIDField.value;
+
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Radio/Checkbox checks
+    const gender = document.querySelector('input[name="gender"]:checked');
+    const ethnicity = document.querySelector('input[name="ethnicity"]:checked');
+    const language = document.querySelector('input[name="language"]:checked');
+
+    // Validation
+
+    const nameRegex = /^[A-Za-z\s\-']+$/;
+    if (!fName || !nameRegex.test(fName)) errors.push("First Name is required and can only contain letters, spaces, dashes, and apostrophes.");
+    if (mInitial && !/^[A-Za-z]$/.test(mInitial)) errors.push("Middle Initial must be a single letter.");
+    if (!lName || !nameRegex.test(lName)) errors.push("Last Name is required and can only contain letters, spaces, dashes, and apostrophes.");
+
+    if (!dob) errors.push("Date of Birth is required.");
+
+    const ssnRegex = /^\d{3}-\d{2}-\d{4}$/;
+    if (!ssn || !ssnRegex.test(ssn)) errors.push("SSN must be 9 digits in the format XXX-XX-XXXX.");
+
+    const addressRegex = /^[A-Za-z0-9\s.,#'\-]+$/;
+    const cityRegex = /^[A-Za-z\s.\-']+$/;
+    if (!address1 || !addressRegex.test(address1)) errors.push("Address Line 1 is required and contains invalid characters.");
+    if (address2 && !addressRegex.test(address2)) errors.push("Address Line 2 contains invalid characters.");
+    if (!city || !cityRegex.test(city)) errors.push("City is required and can only contain letters, spaces, dashes, and periods.");
+    if (!state) errors.push("State selection is required.");
+
+    const zipRegex = /^\d{5}(?:-\d{4})?$/;
+    if (!zip || !zipRegex.test(zip)) errors.push("Zip code must be 5 digits (e.g., 12345) or 9 digits (e.g., 12345-6789).");
+
+    const emailRegex = /^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/;
+    if (!email || !emailRegex.test(email)) errors.push("A valid Email Address is required.");
+
+    const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+    if (phone && !phoneRegex.test(phone)) errors.push("Phone Number must be in the format XXX-XXX-XXXX.");
+
+    if (!gender) errors.push("Gender selection is required.");
+    if (!ethnicity) errors.push("Ethnicity selection is required.");
+    if (!language) errors.push("Primary Language selection is required.");
+
+    if (symptoms.includes('"')) errors.push("Symptoms cannot contain double quotes (\").");
+
+    const userIDRegex = /^[a-z][a-z0-9_\-]{4,19}$/;
+    if (!userID || !userIDRegex.test(userID)) errors.push("User ID must be 5-20 characters, start with a letter, and contain no spaces or special characters (except _ and -).");
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!password) {
+        errors.push("Password is required.");
+    } else {
+        if (!passwordRegex.test(password)) errors.push("Password must be at least 8 characters long, with 1 uppercase, 1 lowercase, and 1 digit.");
+        if (password.includes('"')) errors.push("Password cannot contain double quotes (\").");
+        if (password.toLowerCase() === userID) errors.push("Password cannot equal your User ID.");
+        if (password !== confirmPassword) errors.push("Passwords do not match.");
+    }
+
+    if (errors.length > 0) {
+        // Hide submit button, show errors
+        submitBtn.style.display = 'none';
+        errorDisplay.style.display = 'block';
+        
+        // Format errors as a bulleted list
+        let errorHtml = "<strong>Please fix the following errors:</strong><ul>";
+        errors.forEach(err => errorHtml += `<li>${err}</li>`);
+        errorHtml += "</ul>";
+        errorDisplay.innerHTML = errorHtml;
+    } else {
+        // Show submit button, hide errors
+        errorDisplay.style.display = 'none';
+        submitBtn.style.display = 'inline-block';
+        alert("Validation successful! You may now submit the form.");
+    }
+});
+
+// Hide the Submit button again if the user edits the form after validating
+document.getElementById('registrationForm').addEventListener('input', function() {
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('errorDisplay').style.display = 'none';
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -149,21 +257,16 @@ function formValidation() {
         return false;
     }
 
-    // Regex for 1 upper, 1 lower, 1 digit, 1 special character
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#%^&*()_\-+=\/><.,`~]).+$/;
+    // Regex for at least 1 upper, 1 lower, 1 digit (no special char required)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
     if (!passwordRegex.test(password)) {
-        alert("Error: Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.");
+        alert("Error: Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.");
         return false;
     }
 
-    // Cannot contain User ID, First Name, or Last Name
-    const lowerPassword = password.toLowerCase();
-    if (lowerPassword.includes(uID)) {
-        alert("Error: Password cannot contain your User ID.");
-        return false;
-    }
-    if (lowerPassword.includes(fName) || lowerPassword.includes(lName)) {
-        alert("Error: Password cannot contain your First or Last name.");
+    // Cannot equal User ID
+    if (password === uID || lowerPassword === uID) {
+        alert("Error: Password cannot equal your User ID.");
         return false;
     }
 
@@ -171,3 +274,18 @@ function formValidation() {
     alert("Form submitted successfully!");
     return true; 
 }
+
+// Correct functionality for inputting ssn
+document.getElementById('ssn').addEventListener('input', function(e) {
+    // Strip out all non-numeric characters
+    let val = e.target.value.replace(/\D/g, ''); 
+
+    // Add dashes back in
+    if (val.length > 3 && val.length <= 5) {
+        val = val.slice(0, 3) + '-' + val.slice(3);
+    } else if (val.length > 5) {
+        val = val.slice(0, 3) + '-' + val.slice(3, 5) + '-' + val.slice(5, 9);
+    }
+
+    e.target.value = val;
+});
