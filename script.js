@@ -179,11 +179,6 @@ document.getElementById('registrationForm').addEventListener('input', function()
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Setup Today's Date in Header
-    const today = new Date();
-    const formattedDate = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
-    document.getElementById('today-date').innerHTML = formattedDate;
-
     // Set Min and Max dates for DOB
     const dobInput = document.getElementById('dob');
     
@@ -199,24 +194,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-// For state dropdown menu, populate with all 50 states + DC and PR
-document.addEventListener("DOMContentLoaded", function() {
-    const states = [
-        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", 
-        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", 
-        "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", 
-        "NC", "ND", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", 
-        "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
-    ];
-
+document.addEventListener("DOMContentLoaded", async function() {
     const stateSelect = document.getElementById('state');
-    
-    states.forEach(state => {
-        let option = document.createElement('option');
-        option.value = state;
-        option.textContent = state;
-        stateSelect.appendChild(option);
-    });
+
+    try {
+        // Fetch the data from the local JSON file
+        const response = await fetch('states.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        data.states.forEach(state => {
+            let option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateSelect.appendChild(option);
+        });
+        
+    } catch (error) {
+        // Provide a fallback option if the fetch fails
+        console.error("Failed to fetch states data:", error);
+        
+        let errorOption = document.createElement('option');
+        errorOption.value = "";
+        errorOption.textContent = "Error loading states";
+        stateSelect.appendChild(errorOption);
+    }
 });
 
 function formValidation() {
@@ -288,4 +294,41 @@ document.getElementById('ssn').addEventListener('input', function(e) {
     }
 
     e.target.value = val;
+});
+
+// --- COOKIE HELPER FUNCTIONS ---
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+}
+
+document.getElementById('registrationForm').addEventListener('submit', function() {
+    const firstName = document.getElementById('fName').value.trim();
+    if (firstName) {
+        // Save the first name in a cookie that expires in 30 days
+        setCookie('firstName', firstName, 30);
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const savedName = getCookie('firstName');
+    if (savedName) {
+        document.getElementById('fName').value = savedName;
+    }
 });

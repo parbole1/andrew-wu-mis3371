@@ -16,16 +16,12 @@ code creates the registration form.*/ -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="header"> 
-    <div class="logo-title">
-        <img src="logo.jpg" alt="GP Medical Logo" class="logo">
-        <h1>GP Medical</h1>
-    </div>
-    <div class="right-align">
-        <b>Today's date is: <span id="today-date"></span></b>
-    </div>
-</div>
-<hr>
+    <iframe src="header.html" 
+            style="position: fixed; top: 0; left: 0; width: 100%; height: 100px; border: none; border-bottom: 2px solid rgb(57, 120, 134); z-index: 1000; background-color: beige;" 
+            title="GP Medical Header">
+    </iframe>
+
+    <form name="registration" id="registrationForm" action="success.html" method="GET">
 
 <form name="registration" id="registrationForm" action="success.html" method="GET">
 <table cellpadding="6">
@@ -171,6 +167,27 @@ code creates the registration form.*/ -->
 <div id="reviewSection" style="display: none;">
     <h2>Review Your Information</h2>
     <div id="reviewContent"></div>
+</div>
+
+<div style="text-align: center; margin: 40px auto; padding: 20px; max-width: 800px; background-color: rgb(53, 87, 126); border-radius: 8px;">
+    <h2 style="color: beige; margin-top: 0;">Our Location</h2>
+    <p style="color: beige;">Find us on the map below. You can click and drag to explore the area.</p>
+    
+    <iframe 
+        width="100%" 
+        height="350" 
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-95.58%2C29.61%2C-95.54%2C29.64&layer=mapnik" 
+        style="border: 2px solid beige; border-radius: 4px;"
+        title="GP Medical Location Map"
+        allowfullscreen>
+    </iframe>
+    
+    <br/><br/>
+    <small>
+        <a href="https://www.openstreetmap.org" target="_blank" style="color: beige; text-decoration: underline;">
+            View Larger Map
+        </a>
+    </small>
 </div>
 
 <div class="footer">

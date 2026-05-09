@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: beige;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 20px; 
+        }
+        .logo-title { display: flex; align-items: center; }
+        img { width: 80px; height: auto; opacity: 0.8; }
+        h1 { margin: 0 0 0 15px; font-size: 40px; color: rgb(57, 120, 134); }
+        .right-align { text-align: right; color: rgb(57, 120, 134); }
+    </style>
+</head>
+<body>
+    <div class="header"> 
+        <div class="logo-title">
+            <img src="logo.jpg" alt="GP Medical Logo" class="logo">
+            <h1>GP Medical <span id="welcomeMsg" style="font-size: 20px; font-weight: normal; color: rgb(53, 87, 126); margin-left: 20px;"></span></h1>
+        </div>
+        <div class="right-align">
+            <b>Today's date is: <span id="today-date"></span></b>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date();
+        const formattedDate = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
+        document.getElementById('today-date').innerHTML = formattedDate;
+
+        function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+        }
+        return null;
+    }
+
+    const savedName = getCookie('firstName');
+    if (savedName) {
+        document.getElementById('welcomeMsg').innerText = "- Welcome back, " + savedName + "!";
+    }
+    </script>
+</body>
+</html>
