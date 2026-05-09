@@ -18,41 +18,69 @@
         }
         .logo-title { display: flex; align-items: center; }
         img { width: 80px; height: auto; opacity: 0.8; }
-        h1 { margin: 0 0 0 15px; font-size: 40px; color: rgb(57, 120, 134); }
+        h1 { margin: 0 0 0 15px; font-size: 30px; color: rgb(57, 120, 134); }
         .right-align { text-align: right; color: rgb(57, 120, 134); }
+        .greeting { font-size: 20px; font-weight: normal; margin-left: 15px; color: rgb(53, 87, 126); }
+        .reset-section { margin-top: 5px; font-size: 14px; color: rgb(57, 120, 134); display: none; }
     </style>
 </head>
 <body>
     <div class="header"> 
         <div class="logo-title">
             <img src="logo.jpg" alt="GP Medical Logo" class="logo">
-            <h1>GP Medical <span id="welcomeMsg" style="font-size: 20px; font-weight: normal; color: rgb(53, 87, 126); margin-left: 20px;"></span></h1>
+            <h1>GP Medical <span id="welcomeMsg" class="greeting"></span></h1>
         </div>
         <div class="right-align">
             <b>Today's date is: <span id="today-date"></span></b>
+            
+            <div id="resetSection" class="reset-section">
+                <input type="checkbox" id="notUserCheck" style="cursor: pointer;"> 
+                <label id="notUserLabel" for="notUserCheck" style="cursor: pointer;"></label>
+            </div>
         </div>
     </div>
 
     <script>
+        // 1. Set Today's Date
         const today = new Date();
         const formattedDate = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
         document.getElementById('today-date').innerHTML = formattedDate;
 
+        // 2. Cookie Helper Functions
         function getCookie(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
-        for(let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            }
+            return null;
         }
-        return null;
-    }
 
-    const savedName = getCookie('firstName');
-    if (savedName) {
-        document.getElementById('welcomeMsg').innerText = "- Welcome back, " + savedName + "!";
-    }
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        const savedName = getCookie('firstName');
+        
+        if (savedName) {
+            // Returning User
+            document.getElementById('welcomeMsg').innerText = "- Welcome back, " + savedName;
+            document.getElementById('notUserLabel').innerText = "Not " + savedName + "? Click HERE to start as a NEW USER.";
+            document.getElementById('resetSection').style.display = 'block';
+
+            document.getElementById('notUserCheck').addEventListener('change', function() {
+                if (this.checked) {
+                    deleteCookie('firstName'); // Expire the cookie
+                    window.parent.localStorage.clear();
+                    window.parent.document.getElementById('registrationForm').reset();
+                    window.parent.location.reload(); 
+                }
+            });
+        } else {
+            document.getElementById('welcomeMsg').innerText = "- Welcome New user";
+        }
     </script>
 </body>
 </html>

@@ -297,11 +297,11 @@ document.getElementById('ssn').addEventListener('input', function(e) {
 });
 
 // --- COOKIE HELPER FUNCTIONS ---
-function setCookie(name, value, days) {
+function setCookie(name, value, hours) {
     let expires = "";
-    if (days) {
+    if (hours) {
         const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
     document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
@@ -318,11 +318,20 @@ function getCookie(name) {
     return null;
 }
 
+function deleteCookie(name) {
+    // Setting expiration to a past date instantly deletes it
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+// --- SAVE OR DELETE COOKIE ON SUBMIT ---
 document.getElementById('registrationForm').addEventListener('submit', function() {
     const firstName = document.getElementById('fName').value.trim();
-    if (firstName) {
-        // Save the first name in a cookie that expires in 30 days
-        setCookie('firstName', firstName, 30);
+    const rememberMeChecked = document.getElementById('rememberMe').checked;
+
+    if (rememberMeChecked && firstName) {
+        setCookie('firstName', firstName, 48);
+    } else {
+        deleteCookie('firstName');
     }
 });
 
@@ -331,4 +340,76 @@ document.addEventListener("DOMContentLoaded", function() {
     if (savedName) {
         document.getElementById('fName').value = savedName;
     }
+});
+
+// SAVE NON-SECURE DATA
+const secureFields = ['ssn', 'userID', 'password', 'confirmPassword'];
+
+document.getElementById('registrationForm').addEventListener('change', function(e) {
+    const target = e.target;
+
+    if (secureFields.includes(target.name) || target.name === 'fName' || target.type === 'button' || target.type === 'submit') {
+        return;
+    }
+
+    if (target.type === 'checkbox' && target.name === 'race') {
+        let races = [];
+        document.querySelectorAll('input[name="race"]:checked').forEach(cb => races.push(cb.value));
+        localStorage.setItem('gpMedical_race', JSON.stringify(races));
+    } 
+    else if (target.type === 'radio') {
+        localStorage.setItem('gpMedical_' + target.name, target.value);
+    } 
+    else if (target.name) {
+        localStorage.setItem('gpMedical_' + target.name, target.value);
+        
+        if (target.name === 'healthRating') {
+            document.getElementById('healthValue').innerText = target.value;
+        }
+    }
+});
+
+// LOAD DATA FOR RETURNING USER
+document.addEventListener("DOMContentLoaded", function() {
+    const savedName = getCookie('firstName');
+    
+    if (savedName) {
+        document.getElementById('fName').value = savedName;
+        
+        const nonSecureInputs = ['mInitial', 'lName', 'dob', 'address1', 'address2', 'city', 'state', 'zip', 'email', 'phone', 'healthRating', 'symptoms'];
+        
+        nonSecureInputs.forEach(fieldName => {
+            const savedValue = localStorage.getItem('gpMedical_' + fieldName);
+            if (savedValue) {
+                document.getElementById(fieldName).value = savedValue;
+                
+                if (fieldName === 'healthRating') {
+                    document.getElementById('healthValue').innerText = savedValue;
+                }
+            }
+        });
+
+        ['gender', 'ethnicity', 'language'].forEach(radioName => {
+            const savedRadio = localStorage.getItem('gpMedical_' + radioName);
+            if (savedRadio) {
+                const radioBtn = document.querySelector(`input[name="${radioName}"][value="${savedRadio}"]`);
+                if (radioBtn) radioBtn.checked = true;
+            }
+        });
+
+        const savedRaces = localStorage.getItem('gpMedical_race');
+        if (savedRaces) {
+            const racesArray = JSON.parse(savedRaces);
+            racesArray.forEach(val => {
+                const cb = document.querySelector(`input[name="race"][value="${val}"]`);
+                if (cb) cb.checked = true;
+            });
+        }
+    }
+});
+
+// Clear local storage if the user clicks the "Clear Form" button manually
+document.getElementById('resetBtn').addEventListener('click', function() {
+    localStorage.clear();
+    document.getElementById('healthValue').innerText = "50"; 
 });
